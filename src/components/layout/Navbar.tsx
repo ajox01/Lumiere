@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Show, useClerk } from "@clerk/nextjs";
 import { ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MagneticElement } from "@/components/ui/MagneticElement";
@@ -10,6 +11,8 @@ const navLinks = ["Catalog", "VTO Hub", "Editorial", "About"];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const { signOut } = useClerk();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -17,6 +20,15 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  async function handleSignOut() {
+    // Freeze the button as-is until the hard reload lands — once `signOut()`
+    // clears the session, Clerk's `<Show>` would otherwise flip it to
+    // "Client Access" on this page for a moment before navigation completes.
+    setIsSigningOut(true);
+    await signOut();
+    window.location.href = "/";
+  }
 
   return (
     <header className="fixed inset-x-0 top-6 z-50 flex justify-center px-6">
@@ -28,12 +40,12 @@ export function Navbar() {
             : "bg-white/60 shadow-none backdrop-blur-md",
         )}
       >
-        <Link
+        <a
           href="/"
           className="font-display text-h3 tracking-tight text-primary-black"
         >
           LUMIÈRE
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((label) => (
@@ -49,14 +61,41 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-6">
-          <MagneticElement strength={0.35} className="hidden md:block">
-            <Link
-              href="/login"
-              className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
-            >
-              Client Access
-            </Link>
-          </MagneticElement>
+          {isSigningOut ? (
+            <MagneticElement strength={0.35} className="hidden md:block">
+              <button
+                type="button"
+                disabled
+                className="cursor-not-allowed text-caption font-medium uppercase tracking-[0.15em] text-neutral-600"
+              >
+                Sign Out
+              </button>
+            </MagneticElement>
+          ) : (
+            <>
+              <Show when="signed-out">
+                <MagneticElement strength={0.35} className="hidden md:block">
+                  <Link
+                    href="/login"
+                    className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+                  >
+                    Client Access
+                  </Link>
+                </MagneticElement>
+              </Show>
+              <Show when="signed-in">
+                <MagneticElement strength={0.35} className="hidden md:block">
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="cursor-pointer text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+                  >
+                    Sign Out
+                  </button>
+                </MagneticElement>
+              </Show>
+            </>
+          )}
           <MagneticElement strength={0.45}>
             <button
               type="button"

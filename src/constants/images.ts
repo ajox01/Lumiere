@@ -3,9 +3,11 @@
 // src/assets/images directly.
 
 import heroPortrait from "@/assets/images/lunette.jpeg";
-import authGlassAmber from "@/assets/images/login-glass-amber.png";
+import authGlassAmber from "@/assets/images/login-glass-amber.jpeg";
+import signupAtelier from "@/assets/images/lunsignup.jpeg";
 
 export const images = {
   heroPortrait,
   authGlassAmber,
+  signupAtelier,
 };

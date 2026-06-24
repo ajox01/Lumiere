@@ -12,51 +12,23 @@ import { cn } from "@/lib/cn";
 import { MagneticElement } from "@/components/ui/MagneticElement";
 import { AuthInput } from "@/components/auth/AuthInput";
 import { SocialAuthButton } from "@/components/auth/SocialAuthButton";
+import { AppleGlyph, GoogleGlyph } from "@/components/auth/BrandIcons";
 
-function GoogleGlyph() {
-  return (
-    <svg viewBox="0 0 48 48" className="h-4.5 w-4.5" aria-hidden>
-      <path
-        fill="#FFC107"
-        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-      />
-      <path
-        fill="#FF3D00"
-        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-      />
-      <path
-        fill="#4CAF50"
-        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-      />
-      <path
-        fill="#1976D2"
-        d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-      />
-    </svg>
-  );
-}
-
-function AppleGlyph() {
-  return (
-    <svg
-      viewBox="0 0 814 1000"
-      className="h-4 w-4"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-163.9-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57-155.5-127C46.7 790.7 0 663 0 541.8c0-194.4 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 2.6.6 6.8 1.3 11 1.3 45.4 0 102.5-30.4 138.1-71.3z" />
-    </svg>
-  );
-}
+type Step = "form" | "forgot-email" | "forgot-code" | "forgot-new-password";
 
 export function LoginView() {
   const router = useRouter();
   const { signIn, fetchStatus } = useSignIn();
 
+  const [step, setStep] = useState<Step>("form");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
+  const [formNotice, setFormNotice] = useState<string | null>(null);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(
     null,
   );
@@ -65,6 +37,11 @@ export function LoginView() {
   const imageScaleRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const staggerRefs = useRef<HTMLElement[]>([]);
+  const prevStepRef = useRef(step);
+  if (prevStepRef.current !== step) {
+    staggerRefs.current = [];
+    prevStepRef.current = step;
+  }
   const registerStagger = useCallback((el: HTMLElement | null) => {
     if (el && !staggerRefs.current.includes(el)) staggerRefs.current.push(el);
   }, []);
@@ -114,14 +91,17 @@ export function LoginView() {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [step]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!signIn) return;
     setFormError(null);
 
-    const { error } = await signIn.password({ identifier: email, password });
+    const { error } = await signIn.password({
+      emailAddress: email,
+      password,
+    });
     if (error) {
       setFormError(error.longMessage ?? error.message);
       return;
@@ -150,6 +130,105 @@ export function LoginView() {
     if (error) {
       setFormError(error.longMessage ?? error.message);
       setOauthLoading(null);
+    }
+  }
+
+  function handleForgotPasswordClick() {
+    setFormError(null);
+    setFormNotice(null);
+    setResetEmail(email);
+    setStep("forgot-email");
+  }
+
+  function handleBackToSignIn() {
+    setFormError(null);
+    setFormNotice(null);
+    setResetCode("");
+    setNewPassword("");
+    setStep("form");
+  }
+
+  async function handleSendResetCode(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!signIn) return;
+    setFormError(null);
+    setFormNotice(null);
+
+    const { error: createError } = await signIn.create({
+      identifier: resetEmail,
+    });
+    if (createError) {
+      setFormError(createError.longMessage ?? createError.message);
+      return;
+    }
+
+    const { error: sendError } = await signIn.resetPasswordEmailCode.sendCode();
+    if (sendError) {
+      setFormError(sendError.longMessage ?? sendError.message);
+      return;
+    }
+
+    setStep("forgot-code");
+  }
+
+  async function handleResendCode() {
+    if (!signIn) return;
+    setFormError(null);
+    setFormNotice(null);
+
+    const { error } = await signIn.resetPasswordEmailCode.sendCode();
+    if (error) {
+      setFormError(error.longMessage ?? error.message);
+      return;
+    }
+    setFormNotice("A new code is on its way.");
+  }
+
+  async function handleVerifyResetCode(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+    if (!signIn) return;
+    setFormError(null);
+    setFormNotice(null);
+
+    const { error } = await signIn.resetPasswordEmailCode.verifyCode({
+      code: resetCode,
+    });
+    if (error) {
+      setFormError(error.longMessage ?? error.message);
+      return;
+    }
+
+    if (signIn.status === "needs_new_password") {
+      setStep("forgot-new-password");
+    } else {
+      setFormError("That code didn't work. Please try again.");
+    }
+  }
+
+  async function handleSubmitNewPassword(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+    if (!signIn) return;
+    setFormError(null);
+
+    const { error } = await signIn.resetPasswordEmailCode.submitPassword({
+      password: newPassword,
+      signOutOfOtherSessions: true,
+    });
+    if (error) {
+      setFormError(error.longMessage ?? error.message);
+      return;
+    }
+
+    if (signIn.status === "complete") {
+      await signIn.finalize();
+      router.push("/");
+      router.refresh();
+    } else {
+      setFormError("Something went wrong. Please try again.");
     }
   }
 
@@ -185,144 +264,376 @@ export function LoginView() {
             LUMIÈRE
           </Link>
 
-          <h1
-            ref={registerStagger}
-            className="font-display text-h1 mt-10 text-primary-black"
-          >
-            Sign In
-          </h1>
+          {step === "form" ? (
+            <>
+              <h1
+                ref={registerStagger}
+                className="font-display text-h1 mt-10 text-primary-black"
+              >
+                Sign In
+              </h1>
 
-          <p ref={registerStagger} className="text-body-lg mt-4 text-neutral-600">
-            Enter your details to view your atelier appointments and bespoke
-            selections.
-          </p>
+              <p
+                ref={registerStagger}
+                className="text-body-lg mt-4 text-neutral-600"
+              >
+                Enter your details to view your atelier appointments and
+                bespoke selections.
+              </p>
 
-          <form onSubmit={handleSubmit} className="mt-12 space-y-9">
-            <div ref={registerStagger}>
-              <AuthInput
-                id="email"
-                label="Email Address"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={setEmail}
-              />
-            </div>
-
-            <div ref={registerStagger}>
-              <AuthInput
-                id="password"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={setPassword}
-              />
-            </div>
-
-            <div
-              ref={registerStagger}
-              className="flex items-center justify-between"
-            >
-              <label className="flex cursor-pointer items-center gap-2.5 text-neutral-600">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(event) => setRememberMe(event.target.checked)}
-                  className="peer sr-only"
-                />
-                <span className="flex h-4 w-4 items-center justify-center rounded-full border border-neutral-300 bg-white transition-colors duration-200 ease-out peer-checked:border-primary-black peer-checked:bg-primary-black peer-checked:[&>svg]:opacity-100">
-                  <Check
-                    className="h-2.5 w-2.5 text-white opacity-0 transition-opacity duration-200"
-                    strokeWidth={3}
+              <form onSubmit={handleSubmit} className="mt-12 space-y-9">
+                <div ref={registerStagger}>
+                  <AuthInput
+                    id="email"
+                    label="Email Address"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={setEmail}
                   />
+                </div>
+
+                <div ref={registerStagger}>
+                  <AuthInput
+                    id="password"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={setPassword}
+                  />
+                </div>
+
+                <div
+                  ref={registerStagger}
+                  className="flex items-center justify-between"
+                >
+                  <label className="flex cursor-pointer items-center gap-2.5 text-neutral-600">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(event) =>
+                        setRememberMe(event.target.checked)
+                      }
+                      className="peer sr-only"
+                    />
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-neutral-300 bg-white transition-colors duration-200 ease-out peer-checked:border-primary-black peer-checked:bg-primary-black peer-checked:[&>svg]:opacity-100">
+                      <Check
+                        className="h-2.5 w-2.5 text-white opacity-0 transition-opacity duration-200"
+                        strokeWidth={3}
+                      />
+                    </span>
+                    <span className="text-body-sm">Remember me</span>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={handleForgotPasswordClick}
+                    className="cursor-pointer text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+
+                {formError ? (
+                  <p ref={registerStagger} className="text-body-sm text-error">
+                    {formError}
+                  </p>
+                ) : null}
+
+                <div ref={registerStagger}>
+                  <MagneticElement strength={0.2}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "btn--primary w-full py-4",
+                        isSubmitting && "cursor-not-allowed opacity-60",
+                      )}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Continue"
+                      )}
+                    </button>
+                  </MagneticElement>
+                </div>
+              </form>
+
+              <div
+                ref={registerStagger}
+                className="my-10 flex items-center gap-4"
+              >
+                <span className="h-px flex-1 bg-neutral-200" />
+                <span className="text-caption font-medium uppercase tracking-[0.2em] text-neutral-400">
+                  Or
                 </span>
-                <span className="text-body-sm">Remember me</span>
-              </label>
+                <span className="h-px flex-1 bg-neutral-200" />
+              </div>
+
+              <div ref={registerStagger} className="space-y-4">
+                <SocialAuthButton
+                  icon={
+                    oauthLoading === "google" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <GoogleGlyph />
+                    )
+                  }
+                  label="Continue with Google"
+                  onClick={() => handleOAuth("oauth_google")}
+                  disabled={oauthLoading !== null}
+                />
+                <SocialAuthButton
+                  icon={
+                    oauthLoading === "apple" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <AppleGlyph />
+                    )
+                  }
+                  label="Continue with Apple"
+                  onClick={() => handleOAuth("oauth_apple")}
+                  disabled={oauthLoading !== null}
+                />
+              </div>
+
+              <p
+                ref={registerStagger}
+                className="text-body-sm mt-12 text-center text-neutral-600"
+              >
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="font-medium text-primary-black underline-offset-4 hover:underline"
+                >
+                  Sign Up
+                </Link>
+              </p>
+            </>
+          ) : null}
+
+          {step === "forgot-email" ? (
+            <>
+              <h1
+                ref={registerStagger}
+                className="font-display text-h1 mt-10 text-primary-black"
+              >
+                Reset Password
+              </h1>
+
+              <p
+                ref={registerStagger}
+                className="text-body-lg mt-4 text-neutral-600"
+              >
+                Enter your email and we&apos;ll send you a code to reset your
+                password.
+              </p>
+
+              <form
+                onSubmit={handleSendResetCode}
+                className="mt-12 space-y-9"
+              >
+                <div ref={registerStagger}>
+                  <AuthInput
+                    id="resetEmail"
+                    label="Email Address"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={resetEmail}
+                    onChange={setResetEmail}
+                  />
+                </div>
+
+                {formError ? (
+                  <p ref={registerStagger} className="text-body-sm text-error">
+                    {formError}
+                  </p>
+                ) : null}
+
+                <div ref={registerStagger}>
+                  <MagneticElement strength={0.2}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "btn--primary w-full py-4",
+                        isSubmitting && "cursor-not-allowed opacity-60",
+                      )}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Send Reset Code"
+                      )}
+                    </button>
+                  </MagneticElement>
+                </div>
+              </form>
 
               <button
+                ref={registerStagger}
                 type="button"
-                className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+                onClick={handleBackToSignIn}
+                className="text-body-sm mt-8 block w-full text-center text-neutral-600 underline-offset-4 hover:text-primary-black hover:underline"
               >
-                Forgot password?
+                Back to sign in
               </button>
-            </div>
+            </>
+          ) : null}
 
-            {formError ? (
-              <p ref={registerStagger} className="text-body-sm text-error">
-                {formError}
+          {step === "forgot-code" ? (
+            <>
+              <h1
+                ref={registerStagger}
+                className="font-display text-h1 mt-10 text-primary-black"
+              >
+                Check your inbox
+              </h1>
+
+              <p
+                ref={registerStagger}
+                className="text-body-lg mt-4 text-neutral-600"
+              >
+                We sent a code to {resetEmail}. Enter it below to continue.
               </p>
-            ) : null}
 
-            <div ref={registerStagger}>
-              <MagneticElement strength={0.2}>
+              <form
+                onSubmit={handleVerifyResetCode}
+                className="mt-12 space-y-9"
+              >
+                <div ref={registerStagger}>
+                  <AuthInput
+                    id="resetCode"
+                    label="Verification Code"
+                    type="text"
+                    autoComplete="one-time-code"
+                    required
+                    value={resetCode}
+                    onChange={setResetCode}
+                  />
+                </div>
+
+                {formNotice ? (
+                  <p
+                    ref={registerStagger}
+                    className="text-body-sm text-neutral-600"
+                  >
+                    {formNotice}
+                  </p>
+                ) : null}
+
+                {formError ? (
+                  <p ref={registerStagger} className="text-body-sm text-error">
+                    {formError}
+                  </p>
+                ) : null}
+
+                <div ref={registerStagger}>
+                  <MagneticElement strength={0.2}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "btn--primary w-full py-4",
+                        isSubmitting && "cursor-not-allowed opacity-60",
+                      )}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Verify Code"
+                      )}
+                    </button>
+                  </MagneticElement>
+                </div>
+              </form>
+
+              <div
+                ref={registerStagger}
+                className="mt-8 flex items-center justify-center gap-6"
+              >
                 <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={cn(
-                    "btn--primary w-full py-4",
-                    isSubmitting && "cursor-not-allowed opacity-60",
-                  )}
+                  type="button"
+                  onClick={handleResendCode}
+                  className="text-body-sm text-neutral-600 underline-offset-4 hover:text-primary-black hover:underline"
                 >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Continue"
-                  )}
+                  Resend code
                 </button>
-              </MagneticElement>
-            </div>
-          </form>
+                <button
+                  type="button"
+                  onClick={handleBackToSignIn}
+                  className="text-body-sm text-neutral-600 underline-offset-4 hover:text-primary-black hover:underline"
+                >
+                  Back to sign in
+                </button>
+              </div>
+            </>
+          ) : null}
 
-          <div ref={registerStagger} className="my-10 flex items-center gap-4">
-            <span className="h-px flex-1 bg-neutral-200" />
-            <span className="text-caption font-medium uppercase tracking-[0.2em] text-neutral-400">
-              Or
-            </span>
-            <span className="h-px flex-1 bg-neutral-200" />
-          </div>
+          {step === "forgot-new-password" ? (
+            <>
+              <h1
+                ref={registerStagger}
+                className="font-display text-h1 mt-10 text-primary-black"
+              >
+                Set a New Password
+              </h1>
 
-          <div ref={registerStagger} className="space-y-4">
-            <SocialAuthButton
-              icon={
-                oauthLoading === "google" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <GoogleGlyph />
-                )
-              }
-              label="Continue with Google"
-              onClick={() => handleOAuth("oauth_google")}
-              disabled={oauthLoading !== null}
-            />
-            <SocialAuthButton
-              icon={
-                oauthLoading === "apple" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <AppleGlyph />
-                )
-              }
-              label="Continue with Apple"
-              onClick={() => handleOAuth("oauth_apple")}
-              disabled={oauthLoading !== null}
-            />
-          </div>
+              <p
+                ref={registerStagger}
+                className="text-body-lg mt-4 text-neutral-600"
+              >
+                Choose a new password for {resetEmail}.
+              </p>
 
-          <p
-            ref={registerStagger}
-            className="text-body-sm mt-12 text-center text-neutral-600"
-          >
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="font-medium text-primary-black underline-offset-4 hover:underline"
-            >
-              Sign Up
-            </Link>
-          </p>
+              <form
+                onSubmit={handleSubmitNewPassword}
+                className="mt-12 space-y-9"
+              >
+                <div ref={registerStagger}>
+                  <AuthInput
+                    id="newPassword"
+                    label="New Password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    value={newPassword}
+                    onChange={setNewPassword}
+                  />
+                </div>
+
+                {formError ? (
+                  <p ref={registerStagger} className="text-body-sm text-error">
+                    {formError}
+                  </p>
+                ) : null}
+
+                <div ref={registerStagger}>
+                  <MagneticElement strength={0.2}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "btn--primary w-full py-4",
+                        isSubmitting && "cursor-not-allowed opacity-60",
+                      )}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Reset Password"
+                      )}
+                    </button>
+                  </MagneticElement>
+                </div>
+              </form>
+            </>
+          ) : null}
         </div>
       </div>
     </main>
