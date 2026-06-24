@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Fonts — populated by next/font/local in app/layout.tsx */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-playfair);
+
+  /* Primary palette */
+  --color-primary-black: #111111;
+  --color-primary-gold: #d4bfa1;
+  --color-primary-ivory: #faf7f5;
+  --color-primary-grey: #e9e9eb;
+
+  /* Silk Beige scale — light-to-dark skin-toned beige ramp */
+  --color-silk-50: #fdf8f4;
+  --color-silk-100: #faf0e6;
+  --color-silk-200: #f5e6d3;
+  --color-silk-300: #e8d5bf;
+  --color-silk-400: #d4b896;
+
+  /* Neutrals */
+  --color-neutral-900: #2b2b2e;
+  --color-neutral-600: #6b6b70;
+  --color-neutral-400: #a8a8ad;
+  --color-neutral-200: #e5e5ea;
+
+  /* Semantic */
+  --color-success: #2ecc71;
+  --color-warning: #f5a623;
+  --color-error: #e74c3c;
+  --color-info: #4a90e2;
+
+  /* Accent — interactive gold (links, tertiary actions) */
+  --color-accent-gold: #c8761e;
+
+  /* App background / foreground */
+  --color-background: var(--color-primary-ivory);
+  --color-foreground: var(--color-primary-black);
+
+  /* Border radius scale */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Elevation scale */
+  --shadow-sm: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0px 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0px 16px 40px rgba(0, 0, 0, 0.1);
+
+  /* Type scale — size, line-height, tracking and weight travel together */
+  --text-h1: 56px;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 36px;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 24px;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: 0em;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 18px;
+  --text-h4--line-height: 1.4;
+  --text-h4--letter-spacing: 0em;
+  --text-h4--font-weight: 500;
+
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 14px;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 400;
+
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 1.6;
+  --text-body-sm--font-weight: 400;
+
+  --text-caption: 11px;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 400;
+
+  --text-button: 14px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.04em;
+  --text-button--font-weight: 500;
+}
+
+/* Gradient & accent tokens live outside Tailwind's color namespace —
+   exposed as plain CSS vars and consumed by the utilities below. */
+:root {
+  --gradient-metallic-silver: linear-gradient(135deg, #6b6b6f 0%, #e8e8ea 50%, #8a8a8d 100%);
+  --gradient-metallic-graphite: linear-gradient(135deg, #0f0f10 0%, #4c4c4c 45%, #777777 60%, #6a6b6c 100%);
+  --gradient-warm-bronze: linear-gradient(135deg, #2b1810 0%, #6b3d22 30%, #c9845c 60%, #fdd69b 80%, #4c2513 100%);
+  --gradient-pearl: linear-gradient(135deg, #dec8b6 0%, #f7eadd 50%, #fefaf4 100%);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .bg-gradient-metallic-silver {
+    background-image: var(--gradient-metallic-silver);
+  }
+  .bg-gradient-metallic-graphite {
+    background-image: var(--gradient-metallic-graphite);
+  }
+  .bg-gradient-warm-bronze {
+    background-image: var(--gradient-warm-bronze);
+  }
+  .bg-gradient-pearl {
+    background-image: var(--gradient-pearl);
+  }
+}
+
+@layer components {
+  .btn--primary {
+    @apply text-button inline-flex items-center justify-center gap-2 rounded-full bg-primary-black px-5 py-3 text-white uppercase transition-colors duration-200 ease-out hover:bg-neutral-900;
+  }
+  .btn--secondary {
+    @apply text-button inline-flex items-center justify-center gap-2 rounded-full border border-primary-black bg-transparent px-5 py-3 text-primary-black uppercase transition-colors duration-200 ease-out hover:bg-primary-black/5;
+  }
+  .btn--disabled {
+    @apply text-button inline-flex items-center justify-center gap-2 rounded-full border border-neutral-200 bg-neutral-200 px-5 py-3 text-neutral-400 uppercase cursor-not-allowed;
+  }
+
+  .link--tertiary {
+    @apply text-button text-accent-gold inline-flex items-center gap-1.5 uppercase transition-colors duration-200 ease-out hover:text-primary-black;
+  }
+
+  .field-label {
+    @apply text-body-sm text-neutral-600 mb-2 block;
+  }
+  .input-field {
+    @apply text-body-md text-primary-black w-full rounded-sm border border-neutral-200 bg-white px-4 py-3 transition-colors duration-200 ease-out placeholder:text-neutral-400 focus:border-primary-black focus:outline-none;
+  }
+  .input-field--disabled {
+    @apply cursor-not-allowed border-neutral-200 bg-neutral-200 text-neutral-400;
+  }
+}
