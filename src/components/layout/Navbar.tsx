@@ -50,12 +50,12 @@ export function Navbar() {
 
         <div className="flex items-center gap-6">
           <MagneticElement strength={0.35} className="hidden md:block">
-            <button
-              type="button"
-              className="cursor-pointer text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+            <Link
+              href="/login"
+              className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
             >
               Client Access
-            </button>
+            </Link>
           </MagneticElement>
           <MagneticElement strength={0.45}>
             <button

@@ -3,7 +3,9 @@
 // src/assets/images directly.
 
 import heroPortrait from "@/assets/images/lunette.jpeg";
+import authGlassAmber from "@/assets/images/login-glass-amber.png";
 
 export const images = {
   heroPortrait,
+  authGlassAmber,
 };

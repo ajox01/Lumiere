@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-// import { ClerkProvider } from "@clerk/nextjs"; // TODO: re-enable Clerk auth
+import { ClerkProvider } from "@clerk/nextjs";
 import "@/styles/globals.css";
 
 const inter = localFont({
@@ -69,15 +69,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <ClerkProvider>
-    <html
-      lang="en"
-      className={`${inter.variable} ${playfairDisplay.variable} h-full antialiased`}
-    >
-      <body className="bg-primary-ivory text-primary-black flex min-h-full flex-col">
-        {children}
-      </body>
-    </html>
-    // </ClerkProvider>
+    <ClerkProvider signInUrl="/login" signInFallbackRedirectUrl="/">
+      <html
+        lang="en"
+        className={`${inter.variable} ${playfairDisplay.variable} h-full antialiased`}
+      >
+        <body className="bg-primary-ivory text-primary-black flex min-h-full flex-col">
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
