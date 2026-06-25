@@ -403,7 +403,7 @@ export function SignupView() {
           )}
 
           <span className="text-caption pointer-events-none absolute right-6 bottom-4 text-neutral-400">
-            © 2024 LUMIÈRE
+            © {new Date().getFullYear()} LUMIÈRE
           </span>
         </div>
       </div>

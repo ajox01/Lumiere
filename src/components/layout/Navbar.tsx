@@ -48,16 +48,24 @@ export function Navbar() {
         </a>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((label) => (
-            <MagneticElement key={label} strength={0.35}>
-              <a
-                href="#"
-                className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
-              >
-                {label}
-              </a>
-            </MagneticElement>
-          ))}
+          {navLinks.map((label) => {
+            const href =
+              label === "Catalog"
+                ? "/catalog"
+                : label === "VTO Hub"
+                  ? "/vtohub"
+                  : "#";
+            return (
+              <MagneticElement key={label} strength={0.35}>
+                <Link
+                  href={href}
+                  className="text-caption font-medium uppercase tracking-[0.15em] text-neutral-600 transition-colors duration-300 hover:text-accent-gold"
+                >
+                  {label}
+                </Link>
+              </MagneticElement>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-6">

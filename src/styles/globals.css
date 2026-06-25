@@ -100,6 +100,18 @@
   --gradient-pearl: linear-gradient(135deg, #dec8b6 0%, #f7eadd 50%, #fefaf4 100%);
 }
 
+@keyframes sparkle-shimmer {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(8deg);
+  }
+}
+
 @layer base {
   body {
     background-color: var(--color-background);
@@ -120,6 +132,16 @@
   }
   .bg-gradient-pearl {
     background-image: var(--gradient-pearl);
+  }
+  .animate-sparkle-shimmer {
+    animation: sparkle-shimmer 2.4s ease-in-out infinite;
+  }
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 

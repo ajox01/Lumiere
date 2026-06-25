@@ -140,11 +140,20 @@ export function LoginView() {
     setStep("forgot-email");
   }
 
-  function handleBackToSignIn() {
+  async function handleBackToSignIn() {
     setFormError(null);
     setFormNotice(null);
     setResetCode("");
     setNewPassword("");
+
+    if (signIn) {
+      const { error } = await signIn.reset();
+      if (error) {
+        setFormError(error.longMessage ?? error.message);
+        return;
+      }
+    }
+
     setStep("form");
   }
 
@@ -560,7 +569,11 @@ export function LoginView() {
                 <button
                   type="button"
                   onClick={handleResendCode}
-                  className="text-body-sm text-neutral-600 underline-offset-4 hover:text-primary-black hover:underline"
+                  disabled={fetchStatus === "fetching"}
+                  className={cn(
+                    "text-body-sm text-neutral-600 underline-offset-4 hover:text-primary-black hover:underline",
+                    fetchStatus === "fetching" && "cursor-not-allowed opacity-60",
+                  )}
                 >
                   Resend code
                 </button>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUMIÈRE - Editorial Catalog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-low": "#f7f3f2",
+                        "surface-container-high": "#ebe7e6",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container": "#f1edec",
+                        "surface-tint": "#5f5e5e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#171c20",
+                        "on-primary-fixed-variant": "#474646",
+                        "surface-container-highest": "#e5e2e1",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-bright": "#fdf8f8",
+                        "on-tertiary-fixed-variant": "#43474c",
+                        "on-primary-container": "#858383",
+                        "primary-fixed": "#e5e2e1",
+                        "on-surface-variant": "#444748",
+                        "surface-dim": "#ddd9d8",
+                        "tertiary-container": "#171c20",
+                        "outline": "#747878",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "inverse-primary": "#c8c6c5",
+                        "background": "#fdf8f8",
+                        "on-secondary-fixed": "#241a00",
+                        "secondary": "#735c00",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fed65b",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#745c00",
+                        "primary": "#000000",
+                        "surface": "#fdf8f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-tertiary-container": "#80848a",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#1c1b1b",
+                        "tertiary-fixed": "#dfe3e9",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c4c7c7",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "on-background": "#1c1b1b",
+                        "on-secondary-fixed-variant": "#574500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "24px",
+                        "margin-desktop": "80px",
+                        "unit": "8px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-hero": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "100%", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "120%", "fontWeight": "600" }],
+                        "headline-lg": ["64px", { "lineHeight": "115%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "130%", "fontWeight": "500" }],
+                        "display-hero": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "150%", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0.01em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FBFBF9; /* Alabaster Level 0 */
+            color: #111111; /* Obsidian */
+        }
+        /* Custom scrollbar for horizontal menu */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .masonry-grid {
+            columns: 1;
+            column-gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                columns: 2;
+            }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                columns: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 2rem;
+        }
+        
+        /* Floating glass effect shadow */
+        .glass-shadow {
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.08));
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md text-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-white/80 dark:bg-black/80 backdrop-blur-lg rounded-full mt-6 mx-auto w-fit px-8 py-3 sticky top-0 z-50 border border-outline-variant/30 dark:border-outline/20 flat no shadows text-primary dark:text-on-primary">
+<nav class="flex items-center gap-12 max-w-7xl mx-auto px-12">
+<a class="font-headline-md text-headline-md tracking-tighter text-primary dark:text-on-primary shrink-0" href="#">LUMIÈRE</a>
+<div class="hidden md:flex items-center gap-8 font-label-caps text-label-caps">
+<a class="text-primary dark:text-on-primary border-b border-primary dark:border-on-primary pb-1 scale-95 active:scale-90 transition-transform" href="#">Catalog</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300 scale-95 active:scale-90 transition-transform" href="#">VTO Hub</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300 scale-95 active:scale-90 transition-transform" href="#">Editorial</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300 scale-95 active:scale-90 transition-transform" href="#">About</a>
+</div>
+<div class="flex items-center gap-6 shrink-0">
+<button class="font-label-caps text-label-caps hover:text-secondary transition-colors duration-300 uppercase tracking-widest hidden md:block">Client Access</button>
+<button aria-label="shopping_bag" class="hover:text-secondary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</nav>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-32 gap-16 md:gap-32">
+<!-- Header Section -->
+<section class="flex flex-col gap-8 items-center text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary max-w-3xl">The Architectural Collection</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Precision crafted eyewear engineered for clarity. A study in minimal form and maximum substance.</p>
+</section>
+<!-- Filter Menu (Horizontal Scroll) -->
+<section class="w-full relative">
+<div class="flex overflow-x-auto hide-scrollbar gap-4 pb-4 border-b border-outline-variant/30">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-caps text-label-caps whitespace-nowrap shrink-0 transition-opacity hover:opacity-90">All Frames</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/50 text-on-surface hover:border-secondary hover:text-secondary transition-colors font-label-caps text-label-caps whitespace-nowrap shrink-0">Titanium Series</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/50 text-on-surface hover:border-secondary hover:text-secondary transition-colors font-label-caps text-label-caps whitespace-nowrap shrink-0">Acetate Core</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/50 text-on-surface hover:border-secondary hover:text-secondary transition-colors font-label-caps text-label-caps whitespace-nowrap shrink-0">Sun Protection</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/50 text-on-surface hover:border-secondary hover:text-secondary transition-colors font-label-caps text-label-caps whitespace-nowrap shrink-0">Limited Edition</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/50 text-on-surface hover:border-secondary hover:text-secondary transition-colors font-label-caps text-label-caps whitespace-nowrap shrink-0">Optical</button>
+</div>
+<!-- Fade gradients for scroll indication -->
+<div class="absolute top-0 right-0 h-full w-12 bg-gradient-to-l from-[#FBFBF9] to-transparent pointer-events-none md:hidden"></div>
+</section>
+<!-- Staggered Masonry Grid -->
+<section class="masonry-grid w-full">
+<!-- Item 1 (Tall) -->
+<article class="masonry-item group cursor-pointer">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[500px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of elegant, minimalist titanium wireframe glasses floating against a pure alabaster background. The glasses have a subtle gold tint on the rims. Soft, realistic drop shadows sit beneath them, giving a sense of weightless suspension. High-key lighting, luxury fashion editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBitEiy88atTdcZtoM1sACKb5G-qT4lg1tjmoeNuQ-2IhCXyVglPHS9rJ_8Sf-7rdSPrucEolLZV_tZts_r8LWAovJHM3i1PeiG4R3_WqUD7JaMfBl2Zm3_-eeJWPD0iECxbWOU7bvzfN4kv0lJbmqNPhMhpb_nRHSy5bWo3762IXXQ3rsP7RfBs9ium9cPyLCUybAGTXZnAj9l4oM_X2jTIy3X9ICGdDiXfnEwWJQeIvumkLyiNxD7HcjKzJSr-K9DKiJX-_0VsGlJ"/>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Aero Titanium</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$450</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Brushed Gold / Clear</p>
+</div>
+</article>
+<!-- Item 2 (Square) -->
+<article class="masonry-item group cursor-pointer mt-12 md:mt-24">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[400px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of thick, structural black acetate sunglasses floating against a pure alabaster background. The lenses are dark obsidian. Soft, realistic, dispersed drop shadows imply they are hovering slightly above a surface. Crisp, high-contrast minimalist photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwQhX9e7ng8VCxJnk0_aZVHJpaeoeLjERbkdD9JtAqIMytVPJYGqeIPLEK6ecGVa336lq6LFB8rUZNin38a7zhwMWfKuVSuN5tQkT44wKjLj99l95ieJY3dWvB50TImV3orpbzq1Dhyi-ApNIZKU6fxxcZtXpsVaGYhIIVsZIHdTeTLEH8qk01chhOjOsZdVIcdCJ_iWMLC2p5yH-YOk85y6XeWzpMy0YuIpSllJb-Pi1jCDnd5tnEO-CMbmztEy9VBIcPoEMyY2l3"/>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Monolith Sun</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$380</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Matte Black / Obsidian Lens</p>
+</div>
+</article>
+<!-- Item 3 (Tall) -->
+<article class="masonry-item group cursor-pointer">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[550px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of delicate round wireframe glasses floating against a pure alabaster background. The metal is brushed silver. Extremely soft, realistic drop shadows sit beneath the frame. Bright, clean, luxury minimalist editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDxIHb9vKzCXBBBE2GF3lsNdc4PqjJQTPbz7pzRNf-eTqGIwYQQOXpom2ARiD0ASMmRg9o5V5EqB4iC7UQULRwBAVt0b92Gd9IokCXlWePkc9JKqPg-AMEfvkfhVcsCGq9ZBPHl9uGxCavG5oXjuUD07w4nf862bOpaLyDEVDAjtvI8EuIog_vxaCBBqdmuOa4Dtc1PNyxy83DDdZyOj2VWitAA26iYqCoTN3QI5ND_dBofhqaVGs7MKc6eKX0gDkcW45usr09XIcG"/>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Orbit Optical</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$420</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Brushed Silver / Clear</p>
+</div>
+</article>
+<!-- Item 4 (Square) -->
+<article class="masonry-item group cursor-pointer md:mt-16">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[420px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of translucent champagne-colored acetate glasses floating against an alabaster background. Soft, realistic drop shadows. High-key lighting emphasizing the clarity and luxury of the material. Minimalist product photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB41JE0ONe-aDZnSEspiusBn1Y1HjEHqNpFBlK468wJsKxt_Pir4QA2ej63MQY7HiCjMrvdHskJ70sVMA8p_jnfW9Ucak9wV6s5x4KV9DfLAFsLAEKxPndVZ2t6E5dfX6kPk7zpmHV3aetlqtTxvLjJOu7IrCdimoEBjAQmuobojdwL1ZtRlkm6w3YikWz4CxHfEOBSgcDdPqoVhse_lWmrvNCMh80N01oTXfIxRe3sYQBBQhwL7YbTddslH7Xqtx2UpJm7RCdC3Gdy"/>
+<div class="absolute top-4 left-4 bg-surface-tint/10 text-primary font-label-caps text-label-caps px-3 py-1 rounded-full text-[10px]">New</div>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Lucid Frame</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$350</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Champagne Acetate / Clear</p>
+</div>
+</article>
+<!-- Item 5 (Tall) -->
+<article class="masonry-item group cursor-pointer">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[480px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of sharp, angular geometric sunglasses floating against a pure alabaster background. The frames are dark tortoiseshell. Soft realistic drop shadows beneath. Crisp, high-end editorial product shot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfO0Uv5KBN0mDLzMIW4pgWKbxvuyxiDqxitfiEeUnyRLxjb2yiyM40czqjHjZF1xM3XVI__g2OZTBsdJhpQ1gEHgz4_oHjR8SqGZy57fgkSXYfZjS_B38GWLWPxRtxY02UzZwibaIMoYByatTd7k-UqdKXerbwME0-Ib_RMrpjqdzGzlhiPKTfSzpgWolSkOPjBg_EVe21jAN2BKX6SgSpy_fbvr8DeR8c5bVzKdVpWENsZCavyRQ5JYweIiMqO3isokRrOryGSLkR"/>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Apex Sun</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$410</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Dark Tortoise / Brown Gradient</p>
+</div>
+</article>
+<!-- Item 6 (Square) -->
+<article class="masonry-item group cursor-pointer md:mt-32">
+<div class="bg-white border border-outline-variant/20 rounded-2xl overflow-hidden mb-6 p-8 relative flex items-center justify-center h-[380px] transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-auto object-contain glass-shadow z-10 transition-transform duration-700 group-hover:-translate-y-2" data-alt="A transparent PNG of classic aviator-style titanium glasses floating against an alabaster background. Gunmetal finish. Soft realistic drop shadows beneath. Clean, minimalist luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrKs-KrOFVL95J0q9fYYPcFSA2OB5EXEcLR627Km-umzijK9bZH01lopLwnmion5gbiNo7QOfXiS2NlUfYHYoexqb2L5ubgO2C67DE13v92a5RdDbEo0plkZWLdPbrJCWb_4Aw84SwCpEBQnBWs9sUuzzVo2AsMuP5PDS92b_cz_WfOz3CW85OlyDKfsKX1xAJ-f_UakaigQ-JZ6k3BnQYdnzO7QlUcJ0PRS_oumkQ4pq-qi5b-Bt0yGE9C3DywSe7ekOzGNOqRLNx"/>
+<div class="absolute inset-0 bg-surface-container-low opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<div class="flex justify-between items-start">
+<h2 class="font-label-caps text-label-caps uppercase tracking-widest text-primary">Strato Aviator</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">$480</span>
+</div>
+<p class="font-body-md text-body-md text-outline text-sm">Gunmetal / Clear</p>
+</div>
+</article>
+</section>
+<!-- Load More Action -->
+<div class="flex justify-center mt-16">
+<button class="border border-outline-variant/50 text-primary hover:border-secondary hover:text-secondary transition-colors duration-300 font-label-caps text-label-caps uppercase tracking-widest px-8 py-4 rounded-full">Load More Pieces</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface-dim text-primary dark:text-on-primary font-body-md text-body-md w-full border-t border-outline-variant/30 flat no shadows mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center py-16 px-margin-desktop max-w-container-max mx-auto gap-8 md:gap-0">
+<span class="font-headline-md text-headline-md text-primary dark:text-on-primary">LUMIÈRE</span>
+<div class="flex gap-8">
+<a class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100" href="#">Stockists</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100" href="#">Atelier</a>
+</div>
+<p class="text-on-surface-variant text-sm md:text-base">© 2024 Lumière Optical. Architectural Precision in Vision.</p>
+</div>
+</footer>
+</body></html>
